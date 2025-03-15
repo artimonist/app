@@ -2,7 +2,14 @@
 name = "Artimonist"
 version = "0.1.0"
 description = "Artimonist - A tool for generating mnemonics and wallets."
-authors = ["Artimonist"]
+authors = ["Artimonist <artimonist@gmail.com>"]
+homepage = "https://artimonist.org/"
+repository = "https://github.com/artimonist/artimonist-web/"
+
+license = "MIT"
+keywords = ["bitcoin", "mnemonic", "wallet", "crypto"]
+categories = ["cryptography"]
+# rust-version = "1.84.0"
 edition = "2021"
 
 [lib]
