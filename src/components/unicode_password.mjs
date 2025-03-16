@@ -1,6 +1,6 @@
-var css = `
+let css = `
 input {
-  width: 380px;
+  width: 320px;
   height: 35px;
   padding-left: 5px;
   text-overflow: ellipsis;
@@ -21,12 +21,14 @@ input.invalid {
   border-width: 3px;
   box-shadow: 5px 5px 10px #ff5050, -5px -5px 10px #ffffff;
 }`;
-var html = `<input type="text" minlength="5" maxlength="255" required autofocus/>`;
+let html = `<input type="text" minlength="5" maxlength="255" required/>`;
 
-var template = document.createElement('template');
+let template = document.createElement('template');
 template.id = "UnicodePassword";
 template.innerHTML = `<style>${css}</style>${html}`;
 document.body.append(template);
+
+const unicode_length = (s) => Array.from(s ?? '').length;
 
 class UnicodePassword extends HTMLElement {
   constructor() {
@@ -40,7 +42,7 @@ class UnicodePassword extends HTMLElement {
     // cell can be filled with only one character
     shadow.addEventListener('input', (e) => {
       let t = e.target;
-      Array.from(t.value ?? '').length < 5 ? t.classList.add('invalid') : t.classList.remove('invalid');
+      unicode_length(t.value) < 5 ? t.classList.add('invalid') : t.classList.remove('invalid');
     });
 
     // dispatch custom event
@@ -51,6 +53,10 @@ class UnicodePassword extends HTMLElement {
 
   attributeChangedCallback(name, oldVal, newVal) {
     this.$input.setAttribute(name, newVal);
+  }
+
+  is_valid() {
+    return unicode_length(this.$input.value) >= 5;
   }
 }
 customElements.define('unicode-password', UnicodePassword)

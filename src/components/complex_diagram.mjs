@@ -1,28 +1,26 @@
-var css = `
-:root{
-  --width: 450px;
-  --height: 350px;
-}
+let css = `
 :host {
   display: inline-grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(7, 1fr);
   place-content: center;
-  gap: 2px;
+  gap: 3px;
   border: 1px solid #e5e4e9;
 }
 .cell {
-  width: 50px;
-  height: 35px;
+  width: 120px;
+  height: 60px;
   resize: none;
-  font-size: 32px;
   text-align: center;
-  line-height: 100%;
 
   overflow: hidden;
   border: 1px solid #e5e4e9;
   border-radius: 5px;
-  padding-top: 5px;
+  padding-top: 10px;
+
+  font-size: 36px;
+  line-height: 1.2;
+  text-wrap-style: pretty;
 }
 .cell:hover {
   box-shadow: 5px 5px 10px #aaaaaa, -5px -5px 10px #ffffff;
@@ -35,39 +33,40 @@ var css = `
 }
 .cell:valid {
   box-shadow: inset -1px -1px 3px #ffffff, inset 1px 1px 3px #aaaaaa;
-}
-#tooltip {
-    background: #fff;
-    border: 1px solid red;
-    padding: 3px 10px;
 }`;
-var cell = `<textarea required maxlength="2" placeholder=" " class="cell"></textarea>`;
+let cell = `<textarea required maxlength="50" placeholder=" " class="cell" spellcheck="false"></textarea>`;
 
-var template = document.createElement("template");
-template.id = "SimpleDiagram";
+let template = document.createElement("template");
+template.id = "ComplexDiagram";
 template.innerHTML = `<style>${css}</style>${cell.repeat(49)}`;
 document.body.append(template);
 
-var unicode_first = (s) => Array.from(s ?? '').length > 1 ? Array.from(s).slice(0, 1).join("") : s;
-var unicode_tip = (s) => s ? `\\u\{${s.codePointAt(0).toString(16)}\}` : ``;
+const unicode_limit = (s, n) => Array.from(s ?? '').length > 1 ? Array.from(s).slice(0, n).join('') : s;
+const unicode_tip = (s) => Array.from(s ?? '').map(c => `\\u\{${c.codePointAt(0).toString(16)}\}`).join('');
+const adjust_font = (t, n) => { do { t.style.fontSize = `${n--}px`; } while (t.clientHeight < t.scrollHeight) };
 
-class SimpleDiagram extends HTMLElement {
+class ComplexDiagram extends HTMLElement {
   constructor() {
     super();
 
     let shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(
-      document.getElementById('SimpleDiagram').content.cloneNode(true)
+      document.getElementById('ComplexDiagram').content.cloneNode(true)
     );
     this.$cells = Array.from(shadow.querySelectorAll('.cell'));
-    let style = shadow.style;
-    style.setProperty('--width', style.width);
-    style.setProperty('--height', style.height);
+    shadow.addEventListener('mousemove', (e) => {
+      shadow.style.setProperty('--mouse-x', e.clientX);
+      shadow.style.setProperty('--mouse-y', e.clientY);
+    });
 
-    // cell can be filled with only one character
     shadow.addEventListener('input', (e) => {
-      e.target.value = unicode_first(e.target.value);
+      // prevent newline character, newlines are not allowed.
+      let s = e.target.value.replace(/\r?\n/gi, '');
+      // limit characters length to 20. (most words are less than 20 characters in length)
+      e.target.value = unicode_limit(s, 20);
       e.target.title = unicode_tip(e.target.value);
+      // auto ajust font-size, none characters hide.
+      adjust_font(e.target, 36);
     });
 
     // dispatch custom event
@@ -88,8 +87,9 @@ class SimpleDiagram extends HTMLElement {
 
   set values(value) {
     JSON.parse(value).forEach((v, i) => {
-      this.$cells[i].value = unicode_first(v);
-      this.$cells[i].title = unicode_tip(v);
+      let s = unicode_limit(v, 20);
+      this.$cells[i].value = s;
+      this.$cells[i].title = unicode_tip(s);
     });
   }
 
@@ -105,4 +105,4 @@ class SimpleDiagram extends HTMLElement {
   render() {
   }
 }
-customElements.define('simple-diagram', SimpleDiagram)
+customElements.define('complex-diagram', ComplexDiagram)

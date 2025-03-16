@@ -16,7 +16,8 @@
       <simple-diagram></simple-diagram>
     </div>
     <div>
-      <unicode-password placeholder="Passphrase: at least 5 characters" />
+      <unicode-password placeholder="At least 5 characters" novalidate></unicode-password>
+      <button id="generate" type="button" title="Generate">▶</button>
     </div>
 
     <div class="row">
@@ -35,8 +36,8 @@
     </form>
     <p id="greet-msg"></p> -->
   </main>
-  <script src="./components/simple_diagram.js"></script>
-  <script src="./components/unicode_password.js"></script>
+  <script type="module" src="./components/simple_diagram.mjs"></script>
+  <script type="module" src="./components/unicode_password.mjs"></script>
 </body>
 
 </html>
