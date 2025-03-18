@@ -58,6 +58,10 @@ class UnicodePassword extends HTMLElement {
   is_valid() {
     return unicode_length(this.$input.value) >= 5;
   }
+
+  get value() {
+    return this.$input.value;
+  }
 }
 customElements.define('unicode-password', UnicodePassword)
 

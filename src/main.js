@@ -1,11 +1,12 @@
 const { invoke } = window.__TAURI__.core;
 
-// wasm init
-import wasm_init, { simple_init } from './wasm/artimonist_wasm.js';
-async function run() {
-  await wasm_init();
-}
-run();
+// worker
+var worker = new Worker('./worker/worker.js');
+worker.onmessage = function (event) {
+  // document.body.style.cursor = 'default';
+  $('*').css('cursor', 'default');
+  console.log('Received from worker:', event.data);
+};
 
 // generate 
 let diagram = document.querySelector('simple-diagram');
@@ -15,26 +16,13 @@ generate.addEventListener('click', async () => {
   if (diagram.is_empty() || !password.is_valid()) {
     return;
   }
-  let xpriv = await simple_init(["1", "2", "3", "4", "5", "6", "7", "8", "9"], "xxx");
-  console.log(xpriv);
+  $('*').css('cursor', 'wait');
+  document.body.style.cursor = 'wait';
+  worker.postMessage({
+    method: 'simple_init',
+    args: [diagram.values, password.value]
+  });
 });
 
 diagram.addEventListener('onchange', e => {
-  console.log(e.target.values);
-  console.log('empty: ' + diagram.is_empty());
-  console.log('password: ' + password.is_valid());
-});
-
-async function greet() {
-  // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-  greetMsgEl.textContent = await invoke("greet", { name: greetInputEl.value });
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  // greetInputEl = document.querySelector("#greet-input");
-  // greetMsgEl = document.querySelector("#greet-msg");
-  // document.querySelector("#greet-form").addEventListener("submit", (e) => {
-  //   e.preventDefault();
-  //   greet();
-  // });
 });
