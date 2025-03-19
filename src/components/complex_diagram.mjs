@@ -36,11 +36,6 @@ let css = `
 }`;
 let cell = `<textarea required maxlength="50" placeholder=" " class="cell" spellcheck="false"></textarea>`;
 
-let template = document.createElement("template");
-template.id = "ComplexDiagram";
-template.innerHTML = `<style>${css}</style>${cell.repeat(49)}`;
-document.body.append(template);
-
 const unicode_limit = (s, n) => Array.from(s ?? '').length > 1 ? Array.from(s).slice(0, n).join('') : s;
 const unicode_tip = (s) => Array.from(s ?? '').map(c => `\\u\{${c.codePointAt(0).toString(16)}\}`).join('');
 const adjust_font = (t, n) => { do { t.style.fontSize = `${n--}px`; } while (t.clientHeight < t.scrollHeight) };
@@ -48,16 +43,13 @@ const adjust_font = (t, n) => { do { t.style.fontSize = `${n--}px`; } while (t.c
 class ComplexDiagram extends HTMLElement {
   constructor() {
     super();
+    this.attachShadow({ mode: 'open' });
+  }
 
-    let shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(
-      document.getElementById('ComplexDiagram').content.cloneNode(true)
-    );
+  connectedCallback() {
+    let shadow = this.shadowRoot;
+    shadow.innerHTML = `<style>${css}</style>${cell.repeat(49)}`;
     this.$cells = Array.from(shadow.querySelectorAll('.cell'));
-    shadow.addEventListener('mousemove', (e) => {
-      shadow.style.setProperty('--mouse-x', e.clientX);
-      shadow.style.setProperty('--mouse-y', e.clientY);
-    });
 
     shadow.addEventListener('input', (e) => {
       // prevent newline character, newlines are not allowed.
@@ -99,10 +91,6 @@ class ComplexDiagram extends HTMLElement {
 
   attributeChangedCallback(name, oldVal, newVal) {
     this[name] = newVal;
-    this.render();
-  }
-
-  render() {
   }
 }
 customElements.define('complex-diagram', ComplexDiagram)

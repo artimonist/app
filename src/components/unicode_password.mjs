@@ -23,19 +23,17 @@ input.invalid {
 }`;
 let html = `<input type="text" minlength="5" maxlength="255" required/>`;
 
-let template = document.createElement('template');
-template.id = "UnicodePassword";
-template.innerHTML = `<style>${css}</style>${html}`;
-document.body.append(template);
-
 const unicode_length = (s) => Array.from(s ?? '').length;
 
 class UnicodePassword extends HTMLElement {
   constructor() {
     super();
+    this.attachShadow({ mode: 'open' });
+  }
 
-    let shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(document.getElementById('UnicodePassword').content.cloneNode(true));
+  connectedCallback() {
+    let shadow = this.shadowRoot;
+    shadow.innerHTML = `<style>${css}</style>${html}`;
     this.$input = shadow.querySelector('input');
     this.getAttributeNames().forEach(name => this.$input.setAttribute(name, this.getAttribute(name)));
 

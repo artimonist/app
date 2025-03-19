@@ -39,22 +39,18 @@ let css = `
 }`;
 let cell = `<textarea required maxlength="2" placeholder=" " novalidate class="cell"></textarea>`;
 
-let template = document.createElement("template");
-template.id = "SimpleDiagram";
-template.innerHTML = `<style>${css}</style>${cell.repeat(49)}`;
-document.body.append(template);
-
 const unicode_first = (s) => Array.from(s ?? '').length > 1 ? Array.from(s).slice(0, 1).join("") : s;
 const unicode_tip = (s) => s ? `\\u\{${s.codePointAt(0).toString(16)}\}` : ``;
 
 class SimpleDiagram extends HTMLElement {
   constructor() {
     super();
+    this.attachShadow({ mode: 'open' });
+  }
 
-    let shadow = this.attachShadow({ mode: 'open' });
-    shadow.appendChild(
-      document.getElementById('SimpleDiagram').content.cloneNode(true)
-    );
+  connectedCallback() {
+    let shadow = this.shadowRoot;
+    shadow.innerHTML = `<style>${css}</style>${cell.repeat(49)}`;
     this.$cells = Array.from(shadow.querySelectorAll('.cell'));
 
     // cell can be filled with only one character
@@ -92,10 +88,6 @@ class SimpleDiagram extends HTMLElement {
 
   attributeChangedCallback(name, oldVal, newVal) {
     this[name] = newVal;
-    this.render();
-  }
-
-  render() {
   }
 }
 customElements.define('simple-diagram', SimpleDiagram)
