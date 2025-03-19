@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="styles.css" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tauri App</title>
-  <script src="assets/jquery-4.0.0-beta.min.js"></script>
+  <!-- <script src="assets/jquery-4.0.0-beta.min.js"></script> -->
   <script type="module" src="/main.js" defer></script>
 </head>
 
@@ -17,28 +17,19 @@
       <simple-diagram></simple-diagram>
     </div>
     <div>
-      <unicode-password placeholder="At least 5 characters" novalidate></unicode-password>
+      <input is="unicode-input" minlength="5" maxlength="50" placeholder="At least 5 characters"
+        required></unicode-input>
+      <!-- <unicode-password placeholder="At least 5 characters" novalidate></unicode-password> -->
       <button id="generate" type="button" title="Generate">▶</button>
     </div>
-
     <div class="row">
-      <!-- <a href="https://tauri.app" target="_blank">
-        <img src="/assets/tauri.svg" class="logo tauri" alt="Tauri logo" />
-      </a>
-      <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-        <img src="/assets/javascript.svg" class="logo vanilla" alt="JavaScript logo" />
-      </a> -->
+      <result-tab id="result-tab"></result-tab>
     </div>
-    <!-- <p>Click on the Tauri logo to learn more about the framework</p> -->
-
-    <!-- <form class="row" id="greet-form">
-      <input id="greet-input" placeholder="Enter a name..." />
-      <button type="submit">Greet</button>
-    </form>
-    <p id="greet-msg"></p> -->
   </main>
   <script type="module" src="./components/simple_diagram.mjs"></script>
+  <script type="module" src="./components/unicode_input.mjs"></script>
   <script type="module" src="./components/unicode_password.mjs"></script>
+  <script type="module" src="./components/result-tab.mjs"></script>
   <div class="overlay" id="overlay"></div>
 </body>
 

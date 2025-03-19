@@ -31,11 +31,6 @@ let css = `
 }
 .cell:valid {
   box-shadow: inset -1px -1px 3px #ffffff, inset 1px 1px 3px #aaaaaa;
-}
-#tooltip {
-    background: #fff;
-    border: 1px solid red;
-    padding: 3px 10px;
 }`;
 let cell = `<textarea required maxlength="2" placeholder=" " novalidate class="cell"></textarea>`;
 

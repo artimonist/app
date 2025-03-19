@@ -122,3 +122,9 @@ div:has(unicode-password)>button {
   display: none;
   cursor: wait;
 }
+
+result-tab {
+  padding-top: 15px;
+  width: 100%;
+  ;
+}
