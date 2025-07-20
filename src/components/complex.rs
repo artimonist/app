@@ -17,7 +17,7 @@ pub fn ComplexDiagram() -> Element {
     let cells = (0..49).map(|i| rsx!(ComplexCell { index: i }));
     rsx! {
       document::Link { rel: "stylesheet", href: COMPLEX_CSS }
-      div { class: "diagram", {cells} }
+      div { class: "complex-diagram", {cells} }
       button {
         onclick: move |_| {
             let state = use_context::<ValueState>();
@@ -39,12 +39,9 @@ fn ComplexCell(index: usize) -> Element {
         required: true,
         maxlength: "50",
         placeholder: " ",
-        class: "cell",
+        class: "complex-cell",
         spellcheck: false,
         font_size: "1.0rem",
-        // onchange: move |e| {
-        //     content.set(e.value().chars().take(1).collect());
-        // },
         oninput: move |e| {
             let content = e
                 .value()
