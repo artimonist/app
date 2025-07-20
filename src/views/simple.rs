@@ -2,11 +2,16 @@ use dioxus::logger::tracing;
 use dioxus::prelude::*;
 use std::array::from_fn;
 
+const SIMPLE_CSS: Asset = asset!("/assets/styling/simple.css");
+
 #[component]
 pub fn Simple() -> Element {
     rsx! {
+      document::Link { rel: "stylesheet", href: SIMPLE_CSS }
+
       SimpleDiagram {}
       br {}
+
       button {
         class: "button",
         "data-style": "primary",
@@ -18,35 +23,27 @@ pub fn Simple() -> Element {
     }
 }
 
-const SIMPLE_CSS: Asset = asset!("/assets/styling/simple.css");
 static SIMPLE_VALUES: GlobalSignal<[String; 49]> = Signal::global(|| from_fn(|_| String::new()));
 
 #[component]
 pub fn SimpleDiagram() -> Element {
-    let cells = (0..49).map(|i| rsx!(
-      SimpleCell { index: i }
-    ));
+    let cells = (0..49).map(|i| {
+        let content = SIMPLE_VALUES.read()[i].clone();
+        rsx! {
+          textarea {
+            value: "{content}",
+            title: "{content}",
+            required: true,
+            maxlength: "2",
+            placeholder: " ",
+            class: "simple-cell",
+            oninput: move |e| {
+                SIMPLE_VALUES.write()[i] = e.value().chars().take(1).collect::<String>();
+            },
+          }
+        }
+    });
     rsx! {
-      document::Link { rel: "stylesheet", href: SIMPLE_CSS }
       div { class: "simple-diagram", {cells} }
-    }
-}
-
-#[component]
-fn SimpleCell(index: usize) -> Element {
-    let content = SIMPLE_VALUES.read()[index].clone();
-
-    rsx! {
-      textarea {
-        value: "{content}",
-        required: true,
-        maxlength: "2",
-        placeholder: " ",
-        class: "simple-cell",
-        oninput: move |e| {
-            let content = e.value().chars().take(1).collect::<String>();
-            SIMPLE_VALUES.write()[index] = content.clone();
-        },
-      }
     }
 }
