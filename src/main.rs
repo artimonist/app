@@ -4,6 +4,9 @@ use views::{Complex, Navbar, Simple};
 mod components;
 mod views;
 
+const THEME_CSS: Asset = asset!("/assets/styling/theme.css");
+const STYLE_CSS: Asset = asset!("/assets/styling/style.css");
+
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
@@ -28,6 +31,8 @@ fn App() -> Element {
     rsx! {
       document::Link { rel: "icon", href: FAVICON }
       document::Link { rel: "stylesheet", href: MAIN_CSS }
+      document::Link { rel: "stylesheet", href: THEME_CSS }
+      document::Link { rel: "stylesheet", href: STYLE_CSS }
 
       Router::<Route> {}
     }
