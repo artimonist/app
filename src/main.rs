@@ -1,8 +1,4 @@
-// The dioxus prelude contains a ton of common items used in dioxus apps. It's a good idea to import wherever you
-// need dioxus
 use dioxus::prelude::*;
-
-use components::Hero;
 use views::{Blog, Home, Navbar};
 
 /// Define a components module that contains all shared components for our app.
@@ -40,8 +36,6 @@ const FAVICON: Asset = asset!("/assets/favicon.ico");
 const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
 
 fn main() {
-    // The `launch` function is the main entry point for a dioxus app. It takes a component and renders it with the platform feature
-    // you have enabled
     dioxus::launch(App);
 }
 
@@ -53,14 +47,14 @@ fn main() {
 fn App() -> Element {
     // The `rsx!` macro lets us define HTML inside of rust. It expands to an Element with all of our HTML inside.
     rsx! {
-        // In addition to element and text (which we will see later), rsx can contain other components. In this case,
-        // we are using the `document::Link` component to add a link to our favicon and main CSS file into the head of our app.
-        document::Link { rel: "icon", href: FAVICON }
-        document::Link { rel: "stylesheet", href: MAIN_CSS }
+      // In addition to element and text (which we will see later), rsx can contain other components. In this case,
+      // we are using the `document::Link` component to add a link to our favicon and main CSS file into the head of our app.
+      document::Link { rel: "icon", href: FAVICON }
+      document::Link { rel: "stylesheet", href: MAIN_CSS }
 
 
-        // The router component renders the route enum we defined above. It will handle synchronization of the URL and render
-        // the layouts and components for the active route.
-        Router::<Route> {}
+      // The router component renders the route enum we defined above. It will handle synchronization of the URL and render
+      // the layouts and components for the active route.
+      Router::<Route> {}
     }
 }
