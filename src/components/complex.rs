@@ -1,6 +1,8 @@
 use dioxus::{logger::tracing, prelude::*};
 use std::array::from_fn;
 
+const COMPLEX_CSS: Asset = asset!("/assets/styling/complex.css");
+
 #[derive(Clone, Copy)]
 struct ValueState {
     values: Signal<[String; 49]>,
@@ -14,6 +16,7 @@ pub fn ComplexDiagram() -> Element {
 
     let cells = (0..49).map(|i| rsx!(ComplexCell { index: i }));
     rsx! {
+      document::Link { rel: "stylesheet", href: COMPLEX_CSS }
       div { class: "diagram", {cells} }
       button {
         onclick: move |_| {
