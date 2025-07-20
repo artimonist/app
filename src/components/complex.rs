@@ -7,12 +7,12 @@ struct ValueState {
 }
 
 #[component]
-pub fn SimpleDiagram() -> Element {
+pub fn ComplexDiagram() -> Element {
     let _ = use_context_provider(|| ValueState {
         values: Signal::new(from_fn(|_| String::new())),
     });
 
-    let cells = (0..49).map(|i| rsx!(SimpleCell { index: i }));
+    let cells = (0..49).map(|i| rsx!(ComplexCell { index: i }));
     rsx! {
       div { class: "diagram", {cells} }
       button {
@@ -26,21 +26,30 @@ pub fn SimpleDiagram() -> Element {
 }
 
 #[component]
-fn SimpleCell(index: usize) -> Element {
+fn ComplexCell(index: usize) -> Element {
     let mut state = use_context::<ValueState>();
+    let mut content = state.values.read()[index].clone();
 
     rsx! {
       textarea {
-        value: "{state.values.read()[index]}",
+        value: "{content}",
         required: true,
-        maxlength: "2",
+        maxlength: "50",
         placeholder: " ",
         class: "cell",
+        spellcheck: false,
+        font_size: "1.0rem",
         // onchange: move |e| {
         //     content.set(e.value().chars().take(1).collect());
         // },
         oninput: move |e| {
-            state.values.write()[index] = e.value().chars().take(1).collect();
+            let content = e
+                .value()
+                .chars()
+                .filter(|c| !matches!(c, '\r' | '\n'))
+                .take(20)
+                .collect::<String>();
+            state.values.write()[index] = content.clone();
         },
       }
     }

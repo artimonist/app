@@ -8,11 +8,11 @@
 //! The [`Navbar`] component will be rendered on all pages of our app since every page is under the layout. The layout defines
 //! a common wrapper around all child routes.
 
-mod home;
-pub use home::Home;
+mod simple;
+pub use simple::Simple;
 
-mod blog;
-pub use blog::Blog;
+mod complex;
+pub use complex::Complex;
 
 mod navbar;
 pub use navbar::Navbar;

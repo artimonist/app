@@ -1,0 +1,39 @@
+.diagram {
+  display: inline-grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  place-content: center;
+  gap: 3px;
+  border: 1px solid #e5e4e9;
+}
+
+.cell {
+  width: 120px;
+  height: 60px;
+  resize: none;
+  text-align: center;
+
+  overflow: hidden;
+  border: 1px solid #e5e4e9;
+  border-radius: 5px;
+  padding-top: 10px;
+
+  font-size: 36px;
+  line-height: 1.2;
+  text-wrap-style: pretty;
+}
+
+.cell:hover {
+  box-shadow: 5px 5px 10px #aaaaaa, -5px -5px 10px #ffffff;
+}
+
+.cell:nth-of-type(7n+4),
+.cell:nth-of-type(n + 22):nth-of-type(-n + 28),
+.cell:nth-of-type(28n + 9),
+.cell:nth-of-type(28n + 13) {
+  background-color: #f5f5f5;
+}
+
+.cell:valid {
+  box-shadow: inset -1px -1px 3px #ffffff, inset 1px 1px 3px #aaaaaa;
+}
