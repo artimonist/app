@@ -28,7 +28,7 @@ pub fn ComplexDiagram() -> Element {
 #[component]
 fn ComplexCell(index: usize) -> Element {
     let mut state = use_context::<ValueState>();
-    let mut content = state.values.read()[index].clone();
+    let content = state.values.read()[index].clone();
 
     rsx! {
       textarea {
