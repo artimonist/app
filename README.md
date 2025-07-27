@@ -31,3 +31,6 @@ To run for a different platform, use the `--platform platform` flag. E.g.
 dx serve --platform desktop
 ```
 
+### Publish
+`dx bundle --release --target web --out-dir docs`
+then move files out from public to docs.
