@@ -1,9 +1,11 @@
 [application]
 
 [web.app]
+out_dir = "docs"
+base_path = "app"
 
 # HTML title tag content
-title = "app"
+title = "Artimonist"
 
 # include `assets` in web platform
 [web.resource]

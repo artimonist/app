@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>app</title>
+    <title>Artimonist</title>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="UTF-8" />
-  <link rel="preload" as="script" href="/./assets/artimonist-bf3459714dfb72fd.js" crossorigin><link rel="preload" as="fetch" type="application/wasm" href="/./assets/artimonist_bg-06bbe202270c6dbc.wasm" crossorigin></head>
+  <link rel="preload" as="script" href="/app/assets/artimonist-0ff00f2e92ce051a.js" crossorigin><link rel="preload" as="fetch" type="application/wasm" href="/app/assets/artimonist_bg-eeb7ec9329a78e9e.wasm" crossorigin></head>
   <body>
     <div id="main"></div>
   <script>
             // We can't use a module script here because we need to start the script immediately when streaming
-            import("/./assets/artimonist-bf3459714dfb72fd.js").then(
+            import("/app/assets/artimonist-0ff00f2e92ce051a.js").then(
                 ({ default: init }) => {
-                init("/./assets/artimonist_bg-06bbe202270c6dbc.wasm").then((wasm) => {
+                init("/app/assets/artimonist_bg-eeb7ec9329a78e9e.wasm").then((wasm) => {
                     if (wasm.__wbindgen_start == undefined) {
                     wasm.main();
                     }
