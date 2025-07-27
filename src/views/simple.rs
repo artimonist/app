@@ -11,14 +11,19 @@ pub fn Simple() -> Element {
 
       SimpleDiagram {}
       br {}
-
-      button {
-        class: "button",
-        "data-style": "primary",
-        onclick: move |_| {
-            tracing::debug!("values: {:?}", SIMPLE_VALUES.read());
-        },
-        "Generate"
+      div {
+        input {
+          class: "input",
+          placeholder: "At least 5 unicode characters",
+        }
+        button {
+          class: "button",
+          "data-style": "primary",
+          onclick: move |_| {
+              tracing::debug!("values: {:?}", SIMPLE_VALUES.read());
+          },
+          "Generate"
+        }
       }
     }
 }
@@ -43,6 +48,7 @@ pub fn SimpleDiagram() -> Element {
           }
         }
     });
+
     rsx! {
       div { class: "simple-diagram", {cells} }
     }

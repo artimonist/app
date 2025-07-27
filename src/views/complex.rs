@@ -11,14 +11,19 @@ pub fn Complex(id: i32) -> Element {
 
       ComplexDiagram {}
       br {}
-
-      button {
-        class: "button",
-        "data-style": "primary",
-        onclick: move |_| {
-            tracing::debug!("values: {:?}", COMPLEX_VALUES.read());
-        },
-        "Generate"
+      div {
+        input {
+          class: "input",
+          placeholder: "At least 5 unicode characters",
+        }
+        button {
+          class: "button",
+          "data-style": "primary",
+          onclick: move |_| {
+              tracing::debug!("values: {:?}", COMPLEX_VALUES.read());
+          },
+          "Generate"
+        }
       }
     }
 }
@@ -50,6 +55,7 @@ pub fn ComplexDiagram() -> Element {
           }
         }
     });
+
     rsx! {
       div { class: "complex-diagram", {cells} }
     }
