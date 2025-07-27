@@ -1,8 +1,8 @@
 [application]
 
 [web.app]
-out_dir = "docs"
-base_path = "."
+# out_dir = "docs"
+# base_path = ""
 
 # HTML title tag content
 title = "Artimonist"
