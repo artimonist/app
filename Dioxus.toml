@@ -2,7 +2,7 @@
 
 [web.app]
 out_dir = "docs"
-base_path = "/"
+base_path = "."
 
 # HTML title tag content
 title = "Artimonist"
