@@ -1,3 +1,4 @@
+use artimonist::{BIP85, GenericDiagram, Matrix, ToMatrix};
 use dioxus::logger::tracing;
 use dioxus::prelude::*;
 use std::array::from_fn;
@@ -6,32 +7,43 @@ const COMPLEX_CSS: Asset = asset!("/assets/styling/complex.css");
 
 #[component]
 pub fn Complex(id: i32) -> Element {
+    let mut result = use_signal(|| String::new());
+
     rsx! {
       document::Link { rel: "stylesheet", href: COMPLEX_CSS }
 
       ComplexDiagram {}
-      br {}
-      div {
-        input {
-          class: "input",
-          placeholder: "At least 5 unicode characters",
-        }
-        button {
-          class: "button",
-          "data-style": "primary",
-          onclick: move |_| {
-              tracing::debug!("values: {:?}", COMPLEX_VALUES.read());
-          },
-          "Generate"
-        }
+      input { class: "input", placeholder: "At least 5 unicode characters" }
+      button {
+        class: "button",
+        "data-style": "primary",
+        onclick: move |_| {
+            let mx: Matrix<_> = COMPLEX_VALUES
+                .read()
+                .iter()
+                .map(|s| s.chars().take(20).collect::<String>())
+                .collect::<Vec<_>>()
+                .to_matrix();
+            let salt = PASS_PHRASE.read().clone();
+            if let Ok(master) = artimonist::ComplexDiagram(mx).bip32_master(salt.as_bytes())
+                && let Ok(mnemonic) = master.bip85_mnemonic(Default::default(), 12, 0)
+            {
+                tracing::debug!("master: {:?}", mnemonic);
+                result.set(mnemonic);
+            } else {
+                tracing::error!("Failed to generate master key from diagram");
+            }
+        },
+        "Generate"
       }
+      div { "Mnemonic: {result}" }
     }
 }
 
 static COMPLEX_VALUES: GlobalSignal<[String; 49]> = Signal::global(|| from_fn(|_| String::new()));
 
 #[component]
-pub fn ComplexDiagram() -> Element {
+fn ComplexDiagram() -> Element {
     let cells = (0..49).map(|i| {
         let content = COMPLEX_VALUES.read()[i].clone();
         rsx! {
@@ -58,5 +70,21 @@ pub fn ComplexDiagram() -> Element {
 
     rsx! {
       div { class: "complex-diagram", {cells} }
+    }
+}
+
+static PASS_PHRASE: GlobalSignal<String> = Signal::global(|| String::new());
+
+#[component]
+fn Passphrase() -> Element {
+    rsx! {
+      input {
+        class: "input",
+        placeholder: "At least 5 unicode characters",
+        value: PASS_PHRASE.read().clone(),
+        oninput: move |e| {
+            PASS_PHRASE.write().replace_range(.., &e.value());
+        },
+      }
     }
 }
